@@ -9,15 +9,15 @@ interface TimelineItem {
 }
 
 const timelineItems: TimelineItem[] = [
-  { id: "1", title: "Oil change", date: "Jan 24", completed: true, cost: "€85" },
-  { id: "2", title: "Insurance renewal", date: "Feb 8", completed: false, cost: "€420" },
-  { id: "3", title: "Annual inspection", date: "Mar 15", completed: false, cost: "€45" },
+  { id: "1", title: "Mudança de óleo", date: "Jan 24", completed: true, cost: "€85" },
+  { id: "2", title: "Renovação de seguro", date: "Feb 8", completed: false, cost: "€420" },
+  { id: "3", title: "Inspeção anual", date: "Mar 15", completed: false, cost: "€45" },
 ];
 
 const UpcomingTimeline = () => {
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
-      <h2 className="text-lg font-semibold mb-4 text-foreground">Upcoming</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">Próximos</h2>
       <div className="space-y-3">
         {timelineItems.map((item, index) => (
           <div key={item.id} className="flex items-start gap-3 group hover:bg-secondary/30 p-2 rounded-lg transition-colors -mx-2">

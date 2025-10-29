@@ -53,7 +53,7 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       if (selectedFile.size > 10 * 1024 * 1024) {
-        toast.error("File size must be less than 10MB");
+        toast.error("O tamanho do ficheiro deve ser inferior a 10MB");
         return;
       }
       setFile(selectedFile);
@@ -67,12 +67,12 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
     e.preventDefault();
     
     if (!file) {
-      toast.error("Please select a file");
+      toast.error("Por favor selecione um ficheiro");
       return;
     }
 
     if (!formData.vehicle_id) {
-      toast.error("Please select a vehicle");
+      toast.error("Por favor selecione um veículo");
       return;
     }
 
@@ -90,7 +90,7 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
         },
       });
       
-      toast.success("Document uploaded successfully");
+      toast.success("Documento carregado com sucesso");
       onClose();
       setFormData({
         title: "",
@@ -112,13 +112,13 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Upload Document</DialogTitle>
+          <DialogTitle>Carregar Documento</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* File Upload */}
           <div className="space-y-2">
-            <Label>File *</Label>
+            <Label>Ficheiro *</Label>
             <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer">
               <input
                 type="file"
@@ -148,10 +148,10 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
                   <>
                     <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">
-                      Click to upload or drag and drop
+                      Clique para carregar ou arraste e largue
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      PDF, JPG, PNG (max 10MB)
+                      PDF, JPG, PNG (máx. 10MB)
                     </p>
                   </>
                 )}
@@ -161,19 +161,19 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title">Título *</Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="e.g., Insurance Certificate 2024"
+              placeholder="ex.: Certificado de Seguro 2024"
               required
             />
           </div>
 
           {/* Type */}
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">Tipo *</Label>
             <Select
               value={formData.type}
               onValueChange={(value: typeof documentTypes[number]) =>
@@ -184,24 +184,25 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {documentTypes.map((type) => (
-                  <SelectItem key={type} value={type} className="capitalize">
-                    {type.replace("_", " ")}
-                  </SelectItem>
-                ))}
+                <SelectItem value="insurance">Seguro</SelectItem>
+                <SelectItem value="registration">Registo</SelectItem>
+                <SelectItem value="inspection">Inspeção</SelectItem>
+                <SelectItem value="warranty">Garantia</SelectItem>
+                <SelectItem value="invoice">Fatura</SelectItem>
+                <SelectItem value="other">Outro</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Vehicle */}
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">Veículo *</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder="Selecionar veículo" />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -215,7 +216,7 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
 
           {/* Expiry Date */}
           <div className="space-y-2">
-            <Label>Expiry Date (Optional)</Label>
+            <Label>Data de Validade (Opcional)</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -229,7 +230,7 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
                   {formData.expiry_date ? (
                     format(formData.expiry_date, "PPP")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>Escolher data</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -247,12 +248,12 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
+            <Label htmlFor="notes">Notas (Opcional)</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="Additional notes..."
+              placeholder="Notas adicionais..."
               rows={3}
             />
           </div>
@@ -260,10 +261,10 @@ const UploadDocumentModal = ({ open, onClose, vehicleId }: UploadDocumentModalPr
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Uploading..." : "Upload"}
+              {loading ? "A carregar..." : "Carregar"}
             </Button>
           </div>
         </form>

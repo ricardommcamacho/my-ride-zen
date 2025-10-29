@@ -7,10 +7,10 @@ const BottomNav = () => {
   const location = useLocation();
 
   const navItems = [
-    { icon: Home, label: "Home", path: "/" },
+    { icon: Home, label: "Início", path: "/" },
     { icon: FileText, label: "Docs", path: "/docs" },
     { icon: BarChart3, label: "Stats", path: "/stats" },
-    { icon: Settings, label: "More", path: "/settings" },
+    { icon: Settings, label: "Mais", path: "/settings" },
   ];
 
   return (

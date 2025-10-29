@@ -9,9 +9,9 @@ interface Activity {
 }
 
 const activities: Activity[] = [
-  { id: "1", type: "fuel", title: "Fuel", amount: "€45.30", timeAgo: "2 days ago" },
-  { id: "2", type: "maintenance", title: "Oil change", amount: "€85.00", timeAgo: "1 week ago" },
-  { id: "3", type: "document", title: "Insurance uploaded", amount: "", timeAgo: "2 weeks ago" },
+  { id: "1", type: "fuel", title: "Combustível", amount: "€45.30", timeAgo: "2 dias atrás" },
+  { id: "2", type: "maintenance", title: "Mudança de óleo", amount: "€85.00", timeAgo: "1 semana atrás" },
+  { id: "3", type: "document", title: "Seguro carregado", amount: "", timeAgo: "2 semanas atrás" },
 ];
 
 const iconMap = {
@@ -23,7 +23,7 @@ const iconMap = {
 const RecentActivity = () => {
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-20 animate-slide-up" style={{ animationDelay: "0.4s" }}>
-      <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">Atividade Recente</h2>
       <div className="space-y-3">
         {activities.map((activity) => {
           const Icon = iconMap[activity.type];

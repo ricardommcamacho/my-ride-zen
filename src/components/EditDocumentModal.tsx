@@ -85,7 +85,7 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
         },
       });
       
-      toast.success("Document updated successfully");
+      toast.success("Documento atualizado com sucesso");
       onClose();
     } catch (error: any) {
       toast.error(error.message || "Failed to update document");
@@ -100,25 +100,25 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Document</DialogTitle>
+          <DialogTitle>Editar Documento</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title">Título *</Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="e.g., Insurance Certificate 2024"
+              placeholder="ex.: Certificado de Seguro 2024"
               required
             />
           </div>
 
           {/* Type */}
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">Tipo *</Label>
             <Select
               value={formData.type}
               onValueChange={(value: typeof documentTypes[number]) =>
@@ -129,24 +129,25 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {documentTypes.map((type) => (
-                  <SelectItem key={type} value={type} className="capitalize">
-                    {type.replace("_", " ")}
-                  </SelectItem>
-                ))}
+                <SelectItem value="insurance">Seguro</SelectItem>
+                <SelectItem value="registration">Registo</SelectItem>
+                <SelectItem value="inspection">Inspeção</SelectItem>
+                <SelectItem value="warranty">Garantia</SelectItem>
+                <SelectItem value="invoice">Fatura</SelectItem>
+                <SelectItem value="other">Outro</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Vehicle */}
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">Veículo *</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder="Selecionar veículo" />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -160,7 +161,7 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
 
           {/* Expiry Date */}
           <div className="space-y-2">
-            <Label>Expiry Date (Optional)</Label>
+            <Label>Data de Validade (Opcional)</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -174,7 +175,7 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
                   {formData.expiry_date ? (
                     format(formData.expiry_date, "PPP")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>Escolher data</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -192,12 +193,12 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
+            <Label htmlFor="notes">Notas (Opcional)</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="Additional notes..."
+              placeholder="Notas adicionais..."
               rows={3}
             />
           </div>
@@ -205,10 +206,10 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? "A guardar..." : "Guardar Alterações"}
             </Button>
           </div>
         </form>

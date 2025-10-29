@@ -10,9 +10,9 @@ const AlertBanner = () => {
             <AlertCircle className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h3 className="font-semibold text-warning-foreground">Inspection Due Soon</h3>
+            <h3 className="font-semibold text-warning-foreground">Inspeção Em Breve</h3>
             <p className="text-sm text-foreground/80 mt-1">
-              Your vehicle inspection expires in <span className="font-semibold">5 days</span>
+              A inspeção do seu veículo expira em <span className="font-semibold">5 dias</span>
             </p>
           </div>
         </div>

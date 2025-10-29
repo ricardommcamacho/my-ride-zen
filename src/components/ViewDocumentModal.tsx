@@ -57,7 +57,7 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
             ) : (
               <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
                 <FileText className="w-16 h-16 mb-4" />
-                <p>Preview not available for this file type</p>
+                <p>Pré-visualização não disponível para este tipo de ficheiro</p>
               </div>
             )}
           </div>
@@ -65,14 +65,14 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
           {/* Metadata */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Type</p>
+              <p className="text-sm text-muted-foreground mb-1">Tipo</p>
               <p className="font-medium capitalize">{document.type.replace("_", " ")}</p>
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Vehicle</p>
+              <p className="text-sm text-muted-foreground mb-1">Veículo</p>
               <p className="font-medium">
-                {document.vehicles ? `${document.vehicles.brand} ${document.vehicles.model}` : "N/A"}
+                {document.vehicles ? `${document.vehicles.brand} ${document.vehicles.model}` : "N/D"}
               </p>
             </div>
 
@@ -80,7 +80,7 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
               <div className="col-span-2">
                 <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  Expiry Date
+                  Data de Validade
                 </p>
                 <div className="flex items-center gap-2">
                   <p className="font-medium">
@@ -89,13 +89,13 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
                   {isExpired && (
                     <span className="text-xs text-destructive font-semibold flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" />
-                      Expired
+                      Expirado
                     </span>
                   )}
                   {!isExpired && isExpiringSoon && (
                     <span className="text-xs text-warning font-semibold flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" />
-                      Expiring soon
+                      Expira em breve
                     </span>
                   )}
                 </div>
@@ -104,22 +104,22 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
 
             {document.notes && (
               <div className="col-span-2">
-                <p className="text-sm text-muted-foreground mb-1">Notes</p>
+                <p className="text-sm text-muted-foreground mb-1">Notas</p>
                 <p className="text-sm">{document.notes}</p>
               </div>
             )}
 
             <div>
-              <p className="text-sm text-muted-foreground mb-1">File Size</p>
+              <p className="text-sm text-muted-foreground mb-1">Tamanho do Ficheiro</p>
               <p className="text-sm">
                 {document.file_size
                   ? `${(document.file_size / 1024 / 1024).toFixed(2)} MB`
-                  : "N/A"}
+                  : "N/D"}
               </p>
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Uploaded</p>
+              <p className="text-sm text-muted-foreground mb-1">Carregado</p>
               <p className="text-sm">
                 {format(parseISO(document.created_at!), "MMM d, yyyy")}
               </p>
@@ -129,11 +129,11 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button onClick={onClose} variant="outline" className="flex-1">
-              Close
+              Fechar
             </Button>
             <Button onClick={handleDownload} className="flex-1">
               <Download className="w-4 h-4 mr-2" />
-              Download
+              Transferir
             </Button>
           </div>
         </div>

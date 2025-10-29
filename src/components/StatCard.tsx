@@ -44,7 +44,7 @@ const StatCard = ({ title, value, icon: Icon, change, subtitle }: StatCardProps)
               return ChangeIcon ? <ChangeIcon className="w-3 h-3" /> : null;
             })()}
             <span className="font-medium">
-              {Math.abs(change).toFixed(1)}% vs last period
+              {Math.abs(change).toFixed(1)}% vs período anterior
             </span>
           </div>
         )}

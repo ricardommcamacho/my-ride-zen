@@ -51,7 +51,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
     e.preventDefault();
 
     if (!formData.vehicle_id) {
-      toast.error("Please select a vehicle");
+      toast.error("Por favor selecione um veículo");
       return;
     }
 
@@ -72,7 +72,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
         notes: formData.notes || null,
       });
 
-      toast.success("Maintenance log added successfully");
+      toast.success("Registo de manutenção adicionado com sucesso");
       onClose();
       setFormData({
         vehicle_id: vehicleId || "",
@@ -97,18 +97,18 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Log Service</DialogTitle>
+          <DialogTitle>Registar Serviço</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">Veículo *</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder="Selecionar veículo" />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -121,7 +121,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label>Service Date *</Label>
+            <Label>Data do Serviço *</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -147,7 +147,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">Tipo *</Label>
             <Select
               value={formData.type}
               onValueChange={(value: typeof maintenanceTypes[number]) =>
@@ -158,29 +158,31 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {maintenanceTypes.map((type) => (
-                  <SelectItem key={type} value={type} className="capitalize">
-                    {type.replace("_", " ")}
-                  </SelectItem>
-                ))}
+                <SelectItem value="oil_change">Mudança de óleo</SelectItem>
+                <SelectItem value="tire_rotation">Rotação de pneus</SelectItem>
+                <SelectItem value="brake_service">Serviço de travões</SelectItem>
+                <SelectItem value="battery_replacement">Substituição de bateria</SelectItem>
+                <SelectItem value="inspection">Inspeção</SelectItem>
+                <SelectItem value="repair">Reparação</SelectItem>
+                <SelectItem value="other">Outro</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description *</Label>
+            <Label htmlFor="description">Descrição *</Label>
             <Input
               id="description"
               value={formData.description}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-              placeholder="e.g., Changed engine oil and filter"
+              placeholder="ex.: Mudança de óleo e filtro do motor"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="cost">Cost (€)</Label>
+              <Label htmlFor="cost">Custo (€)</Label>
               <Input
                 id="cost"
                 type="number"
@@ -192,7 +194,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="odometer">Odometer (km) *</Label>
+              <Label htmlFor="odometer">Quilómetros (km) *</Label>
               <Input
                 id="odometer"
                 type="number"
@@ -205,19 +207,19 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="service_provider">Service Provider</Label>
+            <Label htmlFor="service_provider">Prestador de Serviço</Label>
             <Input
               id="service_provider"
               value={formData.service_provider}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, service_provider: e.target.value }))
               }
-              placeholder="e.g., AutoService Pro"
+              placeholder="ex.: AutoService Pro"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Next Service Date</Label>
+            <Label>Próxima Data de Serviço</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -231,7 +233,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
                   {formData.next_service_date ? (
                     format(formData.next_service_date, "PPP")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>Escolher data</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -250,7 +252,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="next_service_km">Next Service Odometer (km)</Label>
+            <Label htmlFor="next_service_km">Próximo Serviço Quilómetros (km)</Label>
             <Input
               id="next_service_km"
               type="number"
@@ -263,22 +265,22 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">Notas</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="Additional notes..."
+              placeholder="Notas adicionais..."
               rows={2}
             />
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Adding..." : "Add Service"}
+              {loading ? "A adicionar..." : "Adicionar Serviço"}
             </Button>
           </div>
         </form>

@@ -34,16 +34,16 @@ export const useDocuments = (vehicleId?: string) => {
   });
 
   const uploadDocument = useMutation({
-    mutationFn: async ({ 
-      file, 
-      vehicleId, 
-      data 
-    }: { 
-      file: File; 
-      vehicleId: string; 
-      data: Omit<DocumentInsert, 'vehicle_id' | 'file_url' | 'file_name' | 'file_size'> 
+    mutationFn: async ({
+      file,
+      vehicleId,
+      data
+    }: {
+      file: File;
+      vehicleId: string;
+      data: Omit<DocumentInsert, 'vehicle_id' | 'file_url' | 'file_name' | 'file_size'>
     }) => {
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error('Não autenticado');
 
       // Upload file to storage
       const timestamp = Date.now();
@@ -79,10 +79,10 @@ export const useDocuments = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
-      toast.success('Document uploaded successfully');
+      toast.success('Documento carregado com sucesso');
     },
     onError: (error: Error) => {
-      toast.error('Failed to upload document: ' + error.message);
+      toast.error('Falha ao carregar documento: ' + error.message);
     },
   });
 
@@ -97,7 +97,7 @@ export const useDocuments = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
-      toast.success('Document updated successfully');
+      toast.success('Documento atualizado com sucesso');
     },
   });
 
@@ -125,7 +125,7 @@ export const useDocuments = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
-      toast.success('Document deleted successfully');
+      toast.success('Documento eliminado com sucesso');
     },
   });
 

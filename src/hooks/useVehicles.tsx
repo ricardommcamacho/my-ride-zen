@@ -34,7 +34,7 @@ export const useVehicles = () => {
 
   const addVehicle = useMutation({
     mutationFn: async (data: Omit<VehicleInsert, 'user_id'>) => {
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error('Não autenticado');
 
       const { data: vehicle, error } = await supabase
         .from('vehicles')
@@ -47,10 +47,10 @@ export const useVehicles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
-      toast.success('Vehicle added successfully');
+      toast.success('Veículo adicionado com sucesso');
     },
     onError: (error: Error) => {
-      toast.error('Failed to add vehicle: ' + error.message);
+      toast.error('Falha ao adicionar veículo: ' + error.message);
     },
   });
 
@@ -65,10 +65,10 @@ export const useVehicles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
-      toast.success('Vehicle updated successfully');
+      toast.success('Veículo atualizado com sucesso');
     },
     onError: (error: Error) => {
-      toast.error('Failed to update vehicle: ' + error.message);
+      toast.error('Falha ao atualizar veículo: ' + error.message);
     },
   });
 
@@ -83,10 +83,10 @@ export const useVehicles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
-      toast.success('Vehicle deleted successfully');
+      toast.success('Veículo eliminado com sucesso');
     },
     onError: (error: Error) => {
-      toast.error('Failed to delete vehicle: ' + error.message);
+      toast.error('Falha ao eliminar veículo: ' + error.message);
     },
   });
 
@@ -101,10 +101,10 @@ export const useVehicles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vehicles'] });
-      toast.success('Primary vehicle updated');
+      toast.success('Veículo principal atualizado');
     },
     onError: (error: Error) => {
-      toast.error('Failed to update primary vehicle: ' + error.message);
+      toast.error('Falha ao atualizar veículo principal: ' + error.message);
     },
   });
 

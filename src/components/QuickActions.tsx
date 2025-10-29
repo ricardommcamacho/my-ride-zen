@@ -19,7 +19,7 @@ const QuickActions = () => {
           className="flex-1 bg-primary hover:bg-primary/90 shadow-elevated"
         >
           <Fuel className="w-5 h-5 mr-2" />
-          Add Fuel
+          Adicionar Combustível
         </Button>
         <Button
           size="lg"
@@ -28,7 +28,7 @@ const QuickActions = () => {
           className="flex-1 hover:bg-secondary"
         >
           <Wrench className="w-5 h-5 mr-2" />
-          Log Service
+          Registar Serviço
         </Button>
         <Button
           size="lg"

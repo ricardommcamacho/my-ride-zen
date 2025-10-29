@@ -31,7 +31,7 @@ const Index = () => {
             VehiclePulse
           </h1>
           <p className="text-muted-foreground animate-fade-in">
-            Manage your vehicle with ease
+            Gerir o seu veículo com facilidade
           </p>
         </div>
 
@@ -59,7 +59,7 @@ const Index = () => {
           !loading && (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">
-                No vehicles yet. Add your first vehicle to get started!
+                Ainda não tem veículos. Adicione o seu primeiro veículo para começar!
               </p>
             </div>
           )

@@ -46,7 +46,7 @@ export const useMaintenance = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenance'] });
-      toast.success('Maintenance log added');
+      toast.success('Registo de manutenção adicionado');
     },
   });
 
@@ -61,7 +61,7 @@ export const useMaintenance = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenance'] });
-      toast.success('Maintenance log updated');
+      toast.success('Registo de manutenção atualizado');
     },
   });
 
@@ -76,7 +76,7 @@ export const useMaintenance = (vehicleId?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenance'] });
-      toast.success('Maintenance log deleted');
+      toast.success('Registo de manutenção eliminado');
     },
   });
 

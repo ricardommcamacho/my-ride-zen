@@ -11,14 +11,14 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const signUpSchema = z.object({
-  email: z.string().email('Invalid email').max(255),
-  password: z.string().min(6, 'Password must be at least 6 characters').max(100),
-  fullName: z.string().min(2, 'Name is required').max(100),
+  email: z.string().email('Email inválido').max(255),
+  password: z.string().min(6, 'A palavra-passe deve ter pelo menos 6 caracteres').max(100),
+  fullName: z.string().min(2, 'Nome é obrigatório').max(100),
 });
 
 const signInSchema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Email inválido'),
+  password: z.string().min(1, 'Palavra-passe é obrigatória'),
 });
 
 const Auth = () => {
@@ -52,12 +52,12 @@ const Auth = () => {
       
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
-          toast.error('Invalid email or password');
+          toast.error('Email ou palavra-passe inválidos');
         } else {
           toast.error(error.message);
         }
       } else {
-        toast.success('Signed in successfully!');
+        toast.success('Sessão iniciada com sucesso!');
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -83,12 +83,12 @@ const Auth = () => {
       
       if (error) {
         if (error.message.includes('already registered')) {
-          toast.error('Email already registered. Please sign in.');
+          toast.error('Email já registado. Por favor, inicie sessão.');
         } else {
           toast.error(error.message);
         }
       } else {
-        toast.success('Account created successfully!');
+        toast.success('Conta criada com sucesso!');
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -107,20 +107,20 @@ const Auth = () => {
             <Car className="w-8 h-8 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">VehiclePulse</h1>
-          <p className="text-muted-foreground">Manage your vehicle with ease</p>
+          <p className="text-muted-foreground">Gerir o seu veículo com facilidade</p>
         </div>
 
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="signin">Iniciar Sessão</TabsTrigger>
+            <TabsTrigger value="signup">Registar</TabsTrigger>
           </TabsList>
           
           <TabsContent value="signin">
             <Card>
               <CardHeader>
-                <CardTitle>Welcome back</CardTitle>
-                <CardDescription>Sign in to your account to continue</CardDescription>
+                <CardTitle>Bem-vindo de volta</CardTitle>
+                <CardDescription>Inicie sessão na sua conta para continuar</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignIn} className="space-y-4">
@@ -129,14 +129,14 @@ const Auth = () => {
                     <Input
                       id="signin-email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="seuemail@exemplo.com"
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password">Password</Label>
+                    <Label htmlFor="signin-password">Palavra-passe</Label>
                     <Input
                       id="signin-password"
                       type="password"
@@ -147,7 +147,7 @@ const Auth = () => {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? 'Signing in...' : 'Sign In'}
+                    {loading ? 'A iniciar sessão...' : 'Iniciar Sessão'}
                   </Button>
                 </form>
               </CardContent>
@@ -157,17 +157,17 @@ const Auth = () => {
           <TabsContent value="signup">
             <Card>
               <CardHeader>
-                <CardTitle>Create account</CardTitle>
-                <CardDescription>Get started with VehiclePulse today</CardDescription>
+                <CardTitle>Criar conta</CardTitle>
+                <CardDescription>Comece a usar o VehiclePulse hoje</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullname">Full Name</Label>
+                    <Label htmlFor="fullname">Nome Completo</Label>
                     <Input
                       id="fullname"
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="João Silva"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       required
@@ -178,14 +178,14 @@ const Auth = () => {
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="seuemail@exemplo.com"
                       value={signUpEmail}
                       onChange={(e) => setSignUpEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">Palavra-passe</Label>
                     <Input
                       id="signup-password"
                       type="password"
@@ -195,11 +195,11 @@ const Auth = () => {
                       required
                     />
                     <p className="text-xs text-muted-foreground">
-                      Must be at least 6 characters
+                      Deve ter pelo menos 6 caracteres
                     </p>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? 'Creating account...' : 'Sign Up'}
+                    {loading ? 'A criar conta...' : 'Registar'}
                   </Button>
                 </form>
               </CardContent>

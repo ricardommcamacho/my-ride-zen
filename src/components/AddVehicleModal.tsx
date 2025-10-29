@@ -9,10 +9,10 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const vehicleSchema = z.object({
-  brand: z.string().min(2, 'Brand is required').max(50),
-  model: z.string().min(1, 'Model is required').max(50),
+  brand: z.string().min(2, 'Marca é obrigatória').max(50),
+  model: z.string().min(1, 'Modelo é obrigatório').max(50),
   year: z.number().int().min(1900).max(new Date().getFullYear() + 1),
-  plate: z.string().min(2, 'Plate is required').max(20),
+  plate: z.string().min(2, 'Matrícula é obrigatória').max(20),
   type: z.enum(['car', 'motorcycle', 'electric']),
   fuel_type: z.enum(['gasoline', 'diesel', 'electric', 'hybrid', 'lpg']),
 });
@@ -79,18 +79,18 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Your First Vehicle</DialogTitle>
+          <DialogTitle>Adicione o Seu Primeiro Veículo</DialogTitle>
           <DialogDescription>
-            Let's get started by adding your vehicle details
+            Vamos começar por adicionar os detalhes do seu veículo
           </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="brand">Brand *</Label>
+            <Label htmlFor="brand">Marca *</Label>
             <Input
               id="brand"
-              placeholder="e.g., Toyota"
+              placeholder="ex.: Toyota"
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
               required
@@ -98,10 +98,10 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="model">Model *</Label>
+            <Label htmlFor="model">Modelo *</Label>
             <Input
               id="model"
-              placeholder="e.g., Corolla"
+              placeholder="ex.: Corolla"
               value={model}
               onChange={(e) => setModel(e.target.value)}
               required
@@ -110,7 +110,7 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="year">Year *</Label>
+              <Label htmlFor="year">Ano *</Label>
               <Input
                 id="year"
                 type="number"
@@ -123,7 +123,7 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="plate">Plate *</Label>
+              <Label htmlFor="plate">Matrícula *</Label>
               <Input
                 id="plate"
                 placeholder="00-AA-00"
@@ -135,41 +135,41 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">Tipo *</Label>
             <Select value={type} onValueChange={(value: any) => setType(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="car">Car</SelectItem>
-                <SelectItem value="motorcycle">Motorcycle</SelectItem>
-                <SelectItem value="electric">Electric</SelectItem>
+                <SelectItem value="car">Carro</SelectItem>
+                <SelectItem value="motorcycle">Mota</SelectItem>
+                <SelectItem value="electric">Elétrico</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="fuel_type">Fuel Type *</Label>
+            <Label htmlFor="fuel_type">Tipo de Combustível *</Label>
             <Select value={fuelType} onValueChange={(value: any) => setFuelType(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gasoline">Gasoline</SelectItem>
-                <SelectItem value="diesel">Diesel</SelectItem>
-                <SelectItem value="electric">Electric</SelectItem>
-                <SelectItem value="hybrid">Hybrid</SelectItem>
-                <SelectItem value="lpg">LPG</SelectItem>
+                <SelectItem value="gasoline">Gasolina</SelectItem>
+                <SelectItem value="diesel">Gasóleo</SelectItem>
+                <SelectItem value="electric">Elétrico</SelectItem>
+                <SelectItem value="hybrid">Híbrido</SelectItem>
+                <SelectItem value="lpg">GPL</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? 'Adding...' : 'Add Vehicle'}
+              {loading ? 'A adicionar...' : 'Adicionar Veículo'}
             </Button>
           </div>
         </form>

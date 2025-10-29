@@ -54,7 +54,7 @@ export const useFuelRecords = (vehicleId?: string, startDate?: Date, endDate?: D
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fuel_records'] });
-      toast.success('Fuel record added');
+      toast.success('Registo de combustível adicionado');
     },
   });
 
@@ -69,7 +69,7 @@ export const useFuelRecords = (vehicleId?: string, startDate?: Date, endDate?: D
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fuel_records'] });
-      toast.success('Fuel record updated');
+      toast.success('Registo de combustível atualizado');
     },
   });
 
@@ -84,7 +84,7 @@ export const useFuelRecords = (vehicleId?: string, startDate?: Date, endDate?: D
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fuel_records'] });
-      toast.success('Fuel record deleted');
+      toast.success('Registo de combustível eliminado');
     },
   });
 
