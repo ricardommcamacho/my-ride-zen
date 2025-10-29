@@ -10,7 +10,7 @@ import { AddVehicleModal } from "@/components/AddVehicleModal";
 import { useVehicles } from "@/hooks/useVehicles";
 
 const Index = () => {
-  const { vehicles, loading } = useVehicles();
+  const { vehicles, primaryVehicle, loading, setPrimaryVehicle } = useVehicles();
   const [showAddVehicle, setShowAddVehicle] = useState(false);
 
   useEffect(() => {
@@ -33,25 +33,29 @@ const Index = () => {
           </p>
         </div>
 
-        {vehicles.length > 0 ? (
+        {vehicles.length > 0 && primaryVehicle ? (
           <>
             {/* Vehicle Selector */}
-            <VehicleHeader />
+            <VehicleHeader 
+              vehicle={primaryVehicle}
+              vehicles={vehicles}
+              onVehicleChange={setPrimaryVehicle}
+            />
 
             {/* Alert Banner */}
-            <AlertBanner />
+            <AlertBanner vehicleId={primaryVehicle.id} />
 
             {/* Quick Actions */}
             <QuickActions />
 
             {/* Monthly Summary */}
-            <MonthlySummary />
+            <MonthlySummary vehicleId={primaryVehicle.id} />
 
             {/* Upcoming Timeline */}
-            <UpcomingTimeline />
+            <UpcomingTimeline vehicleId={primaryVehicle.id} />
 
             {/* Recent Activity */}
-            <RecentActivity />
+            <RecentActivity vehicleId={primaryVehicle.id} />
           </>
         ) : (
           !loading && (

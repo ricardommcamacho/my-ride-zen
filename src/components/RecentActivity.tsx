@@ -1,4 +1,13 @@
 import { Fuel, Wrench, FileText } from "lucide-react";
+import { useFuelRecords } from "@/hooks/useFuelRecords";
+import { useMaintenance } from "@/hooks/useMaintenance";
+import { useDocuments } from "@/hooks/useDocuments";
+import { formatDistanceToNow } from "date-fns";
+import { useMemo } from "react";
+
+interface RecentActivityProps {
+  vehicleId: string;
+}
 
 interface Activity {
   id: string;
@@ -6,13 +15,8 @@ interface Activity {
   title: string;
   amount: string;
   timeAgo: string;
+  date: Date;
 }
-
-const activities: Activity[] = [
-  { id: "1", type: "fuel", title: "Fuel", amount: "€45.30", timeAgo: "2 days ago" },
-  { id: "2", type: "maintenance", title: "Oil change", amount: "€85.00", timeAgo: "1 week ago" },
-  { id: "3", type: "document", title: "Insurance uploaded", amount: "", timeAgo: "2 weeks ago" },
-];
 
 const iconMap = {
   fuel: Fuel,
@@ -20,7 +24,55 @@ const iconMap = {
   document: FileText,
 };
 
-const RecentActivity = () => {
+const RecentActivity = ({ vehicleId }: RecentActivityProps) => {
+  const { fuelRecords } = useFuelRecords(vehicleId);
+  const { maintenanceLogs } = useMaintenance(vehicleId);
+  const { documents } = useDocuments(vehicleId);
+
+  const activities: Activity[] = useMemo(() => {
+    const fuelActivities: Activity[] = fuelRecords.slice(0, 5).map(record => ({
+      id: record.id,
+      type: "fuel" as const,
+      title: "Fuel",
+      amount: `€${record.cost.toFixed(2)}`,
+      timeAgo: formatDistanceToNow(new Date(record.fuel_date), { addSuffix: true }),
+      date: new Date(record.fuel_date),
+    }));
+
+    const maintenanceActivities: Activity[] = maintenanceLogs.slice(0, 5).map(log => ({
+      id: log.id,
+      type: "maintenance" as const,
+      title: log.description,
+      amount: log.cost ? `€${log.cost.toFixed(2)}` : "",
+      timeAgo: formatDistanceToNow(new Date(log.service_date), { addSuffix: true }),
+      date: new Date(log.service_date),
+    }));
+
+    const documentActivities: Activity[] = documents.slice(0, 5).map(doc => ({
+      id: doc.id,
+      type: "document" as const,
+      title: `${doc.title} uploaded`,
+      amount: "",
+      timeAgo: formatDistanceToNow(new Date(doc.created_at), { addSuffix: true }),
+      date: new Date(doc.created_at),
+    }));
+
+    return [...fuelActivities, ...maintenanceActivities, ...documentActivities]
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, 10);
+  }, [fuelRecords, maintenanceLogs, documents]);
+
+  if (activities.length === 0) {
+    return (
+      <div className="bg-card shadow-card rounded-xl p-5 mb-20 animate-slide-up" style={{ animationDelay: "0.4s" }}>
+        <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
+        <p className="text-sm text-muted-foreground text-center py-8">
+          No activity yet. Start by adding fuel or maintenance records!
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-20 animate-slide-up" style={{ animationDelay: "0.4s" }}>
       <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
