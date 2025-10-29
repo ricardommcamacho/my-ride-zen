@@ -1,0 +1,200 @@
+import { useState } from 'react';
+import { TrendingUp, Fuel, Wrench, DollarSign } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useVehicles } from '@/hooks/useVehicles';
+import { useFuelRecords } from '@/hooks/useFuelRecords';
+import { useMaintenance } from '@/hooks/useMaintenance';
+import BottomNav from '@/components/BottomNav';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const Stats = () => {
+  const { vehicles, primaryVehicle, loading: vehiclesLoading } = useVehicles();
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string>('');
+  
+  const currentVehicleId = selectedVehicleId || primaryVehicle?.id;
+  
+  const { fuelRecords, loading: fuelLoading } = useFuelRecords(currentVehicleId);
+  const { maintenanceLogs, loading: maintenanceLoading } = useMaintenance(currentVehicleId);
+
+  // Calculate KPIs
+  const totalFuelSpent = fuelRecords.reduce((sum, record) => sum + Number(record.cost), 0);
+  const totalMaintenanceSpent = maintenanceLogs.reduce((sum, log) => sum + Number(log.cost), 0);
+  const totalSpent = totalFuelSpent + totalMaintenanceSpent;
+
+  // Calculate average consumption
+  const fullTankRecords = fuelRecords
+    .filter(r => r.is_full_tank)
+    .sort((a, b) => a.odometer - b.odometer);
+
+  let avgConsumption = 0;
+  if (fullTankRecords.length >= 2) {
+    let totalConsumption = 0;
+    let validPairs = 0;
+
+    for (let i = 1; i < fullTankRecords.length; i++) {
+      const distance = fullTankRecords[i].odometer - fullTankRecords[i - 1].odometer;
+      const fuel = Number(fullTankRecords[i].quantity);
+
+      if (distance > 0) {
+        totalConsumption += (fuel / distance) * 100;
+        validPairs++;
+      }
+    }
+
+    if (validPairs > 0) {
+      avgConsumption = totalConsumption / validPairs;
+    }
+  }
+
+  if (vehiclesLoading) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <div className="max-w-md mx-auto px-4 py-6">
+          <Skeleton className="h-12 w-full mb-4" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+        <BottomNav />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background pb-20">
+      <div className="max-w-md mx-auto px-4 py-6">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-foreground mb-1">Statistics</h1>
+          <p className="text-muted-foreground">Track your vehicle expenses</p>
+        </div>
+
+        {/* Vehicle Selector */}
+        <div className="mb-6">
+          <Select 
+            value={selectedVehicleId || primaryVehicle?.id || ''} 
+            onValueChange={setSelectedVehicleId}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a vehicle" />
+            </SelectTrigger>
+            <SelectContent>
+              {vehicles.map((v) => (
+                <SelectItem key={v.id} value={v.id}>
+                  {v.brand} {v.model}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                Total Spent
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">€{totalSpent.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Fuel className="w-4 h-4" />
+                Fuel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">€{totalFuelSpent.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Wrench className="w-4 h-4" />
+                Maintenance
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">€{totalMaintenanceSpent.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Avg. Consumption
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">
+                {avgConsumption > 0 ? `${avgConsumption.toFixed(1)}` : 'N/A'}
+              </p>
+              {avgConsumption > 0 && (
+                <p className="text-xs text-muted-foreground">L/100km</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Transactions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {fuelRecords.length === 0 && maintenanceLogs.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">
+                No transactions yet. Start tracking your expenses!
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {[...fuelRecords, ...maintenanceLogs]
+                  .sort((a, b) => {
+                    const dateA = 'fuel_date' in a ? new Date(a.fuel_date) : new Date(a.service_date);
+                    const dateB = 'fuel_date' in b ? new Date(b.fuel_date) : new Date(b.service_date);
+                    return dateB.getTime() - dateA.getTime();
+                  })
+                  .slice(0, 10)
+                  .map((item, idx) => {
+                    const isFuel = 'fuel_date' in item;
+                    const date = isFuel ? item.fuel_date : item.service_date;
+                    const cost = Number(item.cost);
+
+                    return (
+                      <div key={idx} className="flex items-center justify-between py-2 border-b last:border-0">
+                        <div className="flex items-center gap-3">
+                          {isFuel ? (
+                            <Fuel className="w-4 h-4 text-primary" />
+                          ) : (
+                            <Wrench className="w-4 h-4 text-primary" />
+                          )}
+                          <div>
+                            <p className="font-medium text-sm">
+                              {isFuel ? 'Fuel refill' : item.description}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="font-semibold">€{cost.toFixed(2)}</p>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+      <BottomNav />
+    </div>
+  );
+};
+
+export default Stats;

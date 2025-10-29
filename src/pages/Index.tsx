@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import VehicleHeader from "@/components/VehicleHeader";
 import AlertBanner from "@/components/AlertBanner";
 import QuickActions from "@/components/QuickActions";
@@ -5,10 +6,21 @@ import MonthlySummary from "@/components/MonthlySummary";
 import UpcomingTimeline from "@/components/UpcomingTimeline";
 import RecentActivity from "@/components/RecentActivity";
 import BottomNav from "@/components/BottomNav";
+import { AddVehicleModal } from "@/components/AddVehicleModal";
+import { useVehicles } from "@/hooks/useVehicles";
 
 const Index = () => {
+  const { vehicles, loading } = useVehicles();
+  const [showAddVehicle, setShowAddVehicle] = useState(false);
+
+  useEffect(() => {
+    if (!loading && vehicles.length === 0) {
+      setShowAddVehicle(true);
+    }
+  }, [vehicles, loading]);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Main Content */}
       <div className="max-w-md mx-auto px-4 py-6">
         {/* Header */}
@@ -21,24 +33,42 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Vehicle Selector */}
-        <VehicleHeader />
+        {vehicles.length > 0 ? (
+          <>
+            {/* Vehicle Selector */}
+            <VehicleHeader />
 
-        {/* Alert Banner */}
-        <AlertBanner />
+            {/* Alert Banner */}
+            <AlertBanner />
 
-        {/* Quick Actions */}
-        <QuickActions />
+            {/* Quick Actions */}
+            <QuickActions />
 
-        {/* Monthly Summary */}
-        <MonthlySummary />
+            {/* Monthly Summary */}
+            <MonthlySummary />
 
-        {/* Upcoming Timeline */}
-        <UpcomingTimeline />
+            {/* Upcoming Timeline */}
+            <UpcomingTimeline />
 
-        {/* Recent Activity */}
-        <RecentActivity />
+            {/* Recent Activity */}
+            <RecentActivity />
+          </>
+        ) : (
+          !loading && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">
+                No vehicles yet. Add your first vehicle to get started!
+              </p>
+            </div>
+          )
+        )}
       </div>
+
+      {/* Add Vehicle Modal */}
+      <AddVehicleModal 
+        open={showAddVehicle} 
+        onClose={() => setShowAddVehicle(false)} 
+      />
 
       {/* Bottom Navigation */}
       <BottomNav />

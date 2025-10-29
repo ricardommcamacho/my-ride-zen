@@ -14,7 +14,269 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      documents: {
+        Row: {
+          created_at: string | null
+          expiry_date: string | null
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          notes: string | null
+          reminder_days_before: number | null
+          title: string
+          type: Database["public"]["Enums"]["document_type"]
+          updated_at: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expiry_date?: string | null
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          notes?: string | null
+          reminder_days_before?: number | null
+          title: string
+          type?: Database["public"]["Enums"]["document_type"]
+          updated_at?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expiry_date?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          notes?: string | null
+          reminder_days_before?: number | null
+          title?: string
+          type?: Database["public"]["Enums"]["document_type"]
+          updated_at?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fuel_records: {
+        Row: {
+          cost: number
+          created_at: string | null
+          fuel_date: string
+          fuel_type: string
+          id: string
+          is_full_tank: boolean | null
+          location: string | null
+          notes: string | null
+          odometer: number
+          price_per_unit: number
+          quantity: number
+          station_name: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          cost: number
+          created_at?: string | null
+          fuel_date?: string
+          fuel_type: string
+          id?: string
+          is_full_tank?: boolean | null
+          location?: string | null
+          notes?: string | null
+          odometer: number
+          price_per_unit: number
+          quantity: number
+          station_name?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          cost?: number
+          created_at?: string | null
+          fuel_date?: string
+          fuel_type?: string
+          id?: string
+          is_full_tank?: boolean | null
+          location?: string | null
+          notes?: string | null
+          odometer?: number
+          price_per_unit?: number
+          quantity?: number
+          station_name?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_records_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_logs: {
+        Row: {
+          cost: number | null
+          created_at: string | null
+          description: string
+          id: string
+          next_service_date: string | null
+          next_service_km: number | null
+          notes: string | null
+          odometer: number
+          receipt_url: string | null
+          service_date: string
+          service_provider: string | null
+          type: Database["public"]["Enums"]["maintenance_type"]
+          updated_at: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string | null
+          description: string
+          id?: string
+          next_service_date?: string | null
+          next_service_km?: number | null
+          notes?: string | null
+          odometer: number
+          receipt_url?: string | null
+          service_date?: string
+          service_provider?: string | null
+          type: Database["public"]["Enums"]["maintenance_type"]
+          updated_at?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          next_service_date?: string | null
+          next_service_km?: number | null
+          notes?: string | null
+          odometer?: number
+          receipt_url?: string | null
+          service_date?: string
+          service_provider?: string | null
+          type?: Database["public"]["Enums"]["maintenance_type"]
+          updated_at?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_logs_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          avatar_url: string | null
+          battery_capacity: number | null
+          brand: string
+          created_at: string | null
+          current_km: number | null
+          fuel_type: Database["public"]["Enums"]["fuel_type"]
+          id: string
+          is_primary: boolean | null
+          model: string
+          notes: string | null
+          plate: string
+          purchase_date: string | null
+          tank_capacity: number | null
+          type: Database["public"]["Enums"]["vehicle_type"]
+          updated_at: string | null
+          user_id: string
+          vin: string | null
+          year: number
+        }
+        Insert: {
+          avatar_url?: string | null
+          battery_capacity?: number | null
+          brand: string
+          created_at?: string | null
+          current_km?: number | null
+          fuel_type?: Database["public"]["Enums"]["fuel_type"]
+          id?: string
+          is_primary?: boolean | null
+          model: string
+          notes?: string | null
+          plate: string
+          purchase_date?: string | null
+          tank_capacity?: number | null
+          type?: Database["public"]["Enums"]["vehicle_type"]
+          updated_at?: string | null
+          user_id: string
+          vin?: string | null
+          year: number
+        }
+        Update: {
+          avatar_url?: string | null
+          battery_capacity?: number | null
+          brand?: string
+          created_at?: string | null
+          current_km?: number | null
+          fuel_type?: Database["public"]["Enums"]["fuel_type"]
+          id?: string
+          is_primary?: boolean | null
+          model?: string
+          notes?: string | null
+          plate?: string
+          purchase_date?: string | null
+          tank_capacity?: number | null
+          type?: Database["public"]["Enums"]["vehicle_type"]
+          updated_at?: string | null
+          user_id?: string
+          vin?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +285,23 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      document_type:
+        | "insurance"
+        | "registration"
+        | "inspection"
+        | "invoice"
+        | "warranty"
+        | "other"
+      fuel_type: "gasoline" | "diesel" | "electric" | "hybrid" | "lpg"
+      maintenance_type:
+        | "oil_change"
+        | "tire_rotation"
+        | "brake_service"
+        | "inspection"
+        | "repair"
+        | "battery_replacement"
+        | "other"
+      vehicle_type: "car" | "motorcycle" | "electric"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +428,26 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      document_type: [
+        "insurance",
+        "registration",
+        "inspection",
+        "invoice",
+        "warranty",
+        "other",
+      ],
+      fuel_type: ["gasoline", "diesel", "electric", "hybrid", "lpg"],
+      maintenance_type: [
+        "oil_change",
+        "tire_rotation",
+        "brake_service",
+        "inspection",
+        "repair",
+        "battery_replacement",
+        "other",
+      ],
+      vehicle_type: ["car", "motorcycle", "electric"],
+    },
   },
 } as const
