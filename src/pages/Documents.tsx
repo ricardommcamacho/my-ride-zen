@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { FileText, Search, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,12 +9,26 @@ import { useDocuments } from '@/hooks/useDocuments';
 import BottomNav from '@/components/BottomNav';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 
 const Documents = () => {
   const { vehicles, loading: vehiclesLoading } = useVehicles();
   const [selectedVehicleId, setSelectedVehicleId] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      // TODO: Implement document upload logic
+      toast({
+        title: "Upload em desenvolvimento",
+        description: `${files.length} arquivo(s) selecionado(s)`,
+      });
+    }
+  };
   
   const { documents, loading: documentsLoading } = useDocuments(
     selectedVehicleId === 'all' ? undefined : selectedVehicleId
@@ -63,7 +77,20 @@ const Documents = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Button size="icon" variant="outline">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,application/pdf"
+              capture="environment"
+              multiple
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <Button 
+              size="icon" 
+              variant="outline"
+              onClick={() => fileInputRef.current?.click()}
+            >
               <Upload className="w-4 h-4" />
             </Button>
           </div>
