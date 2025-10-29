@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import VehicleHeader from "@/components/VehicleHeader";
 import AlertBanner from "@/components/AlertBanner";
 import QuickActions from "@/components/QuickActions";
@@ -9,15 +9,18 @@ import BottomNav from "@/components/BottomNav";
 import { AddVehicleModal } from "@/components/AddVehicleModal";
 import { useVehicles } from "@/hooks/useVehicles";
 
+const FIRST_VISIT_KEY = "vehiclePulse_firstVisit";
+
 const Index = () => {
   const { vehicles, primaryVehicle, loading, setPrimaryVehicle } = useVehicles();
   const [showAddVehicle, setShowAddVehicle] = useState(false);
-  const hasShownModal = useRef(false);
 
   useEffect(() => {
-    if (!loading && vehicles.length === 0 && !hasShownModal.current) {
+    const hasVisitedBefore = localStorage.getItem(FIRST_VISIT_KEY);
+    
+    if (!loading && vehicles.length === 0 && !hasVisitedBefore) {
       setShowAddVehicle(true);
-      hasShownModal.current = true;
+      localStorage.setItem(FIRST_VISIT_KEY, "true");
     }
   }, [vehicles, loading]);
 
