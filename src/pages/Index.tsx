@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import VehicleHeader from "@/components/VehicleHeader";
 import AlertBanner from "@/components/AlertBanner";
 import QuickActions from "@/components/QuickActions";
@@ -12,10 +12,12 @@ import { useVehicles } from "@/hooks/useVehicles";
 const Index = () => {
   const { vehicles, loading } = useVehicles();
   const [showAddVehicle, setShowAddVehicle] = useState(false);
+  const hasShownModal = useRef(false);
 
   useEffect(() => {
-    if (!loading && vehicles.length === 0) {
+    if (!loading && vehicles.length === 0 && !hasShownModal.current) {
       setShowAddVehicle(true);
+      hasShownModal.current = true;
     }
   }, [vehicles, loading]);
 
