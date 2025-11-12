@@ -3,7 +3,10 @@ import { useFuelRecords } from "@/hooks/useFuelRecords";
 import { useMaintenance } from "@/hooks/useMaintenance";
 import { useDocuments } from "@/hooks/useDocuments";
 import { formatDistanceToNow } from "date-fns";
+import { pt } from "date-fns/locale";
 import { useMemo } from "react";
+import { t } from "@/lib/localization";
+import { formatNumber } from "@/lib/utils";
 
 interface RecentActivityProps {
   vehicleId: string;
@@ -33,9 +36,9 @@ const RecentActivity = ({ vehicleId }: RecentActivityProps) => {
     const fuelActivities: Activity[] = fuelRecords.slice(0, 5).map(record => ({
       id: record.id,
       type: "fuel" as const,
-      title: "Fuel",
-      amount: `€${record.cost.toFixed(2)}`,
-      timeAgo: formatDistanceToNow(new Date(record.fuel_date), { addSuffix: true }),
+      title: t("recentActivity.fuel"),
+      amount: `€${formatNumber(record.cost, 2)}`,
+      timeAgo: formatDistanceToNow(new Date(record.fuel_date), { addSuffix: true, locale: pt }),
       date: new Date(record.fuel_date),
     }));
 
@@ -43,17 +46,17 @@ const RecentActivity = ({ vehicleId }: RecentActivityProps) => {
       id: log.id,
       type: "maintenance" as const,
       title: log.description,
-      amount: log.cost ? `€${log.cost.toFixed(2)}` : "",
-      timeAgo: formatDistanceToNow(new Date(log.service_date), { addSuffix: true }),
+      amount: log.cost ? `€${formatNumber(log.cost, 2)}` : "",
+      timeAgo: formatDistanceToNow(new Date(log.service_date), { addSuffix: true, locale: pt }),
       date: new Date(log.service_date),
     }));
 
     const documentActivities: Activity[] = documents.slice(0, 5).map(doc => ({
       id: doc.id,
       type: "document" as const,
-      title: `${doc.title} uploaded`,
+      title: `${doc.title} ${t("recentActivity.uploaded")}`,
       amount: "",
-      timeAgo: formatDistanceToNow(new Date(doc.created_at), { addSuffix: true }),
+      timeAgo: formatDistanceToNow(new Date(doc.created_at), { addSuffix: true, locale: pt }),
       date: new Date(doc.created_at),
     }));
 
@@ -65,9 +68,9 @@ const RecentActivity = ({ vehicleId }: RecentActivityProps) => {
   if (activities.length === 0) {
     return (
       <div className="bg-card shadow-card rounded-xl p-5 mb-20 animate-slide-up" style={{ animationDelay: "0.4s" }}>
-        <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
+        <h2 className="text-lg font-semibold mb-4 text-foreground">{t("recentActivity.recentActivity")}</h2>
         <p className="text-sm text-muted-foreground text-center py-8">
-          No activity yet. Start by adding fuel or maintenance records!
+          {t("recentActivity.noActivity")}
         </p>
       </div>
     );
@@ -75,7 +78,7 @@ const RecentActivity = ({ vehicleId }: RecentActivityProps) => {
 
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-20 animate-slide-up" style={{ animationDelay: "0.4s" }}>
-      <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">{t("recentActivity.recentActivity")}</h2>
       <div className="space-y-3">
         {activities.map((activity) => {
           const Icon = iconMap[activity.type];

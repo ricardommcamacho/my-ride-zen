@@ -8,6 +8,7 @@ import RecentActivity from "@/components/RecentActivity";
 import BottomNav from "@/components/BottomNav";
 import { AddVehicleModal } from "@/components/AddVehicleModal";
 import { useVehicles } from "@/hooks/useVehicles";
+import { t } from "@/lib/localization";
 
 const FIRST_VISIT_KEY = "vehiclePulse_firstVisit";
 
@@ -31,10 +32,10 @@ const Index = () => {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-1 animate-fade-in">
-            VehiclePulse
+            {t('app.name')}
           </h1>
           <p className="text-muted-foreground animate-fade-in">
-            Manage your vehicle with ease
+            {t('app.tagline')}
           </p>
         </div>
 
@@ -66,7 +67,7 @@ const Index = () => {
           !loading && (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">
-                No vehicles yet. Add your first vehicle to get started!
+                {t('index.noVehicles')}
               </p>
             </div>
           )
