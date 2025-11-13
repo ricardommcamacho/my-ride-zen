@@ -8,7 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format, differenceInDays, parseISO } from "date-fns";
+import { cn, formatDateFromISO } from "@/lib/utils";
 import { Tables } from "@/integrations/supabase/types";
+import { t } from "@/lib/localization";
 
 type Document = Tables<"documents"> & {
   vehicles: { brand: string; model: string } | null;
@@ -28,11 +30,11 @@ const DocumentCard = ({ document, onView, onEdit, onDelete }: DocumentCardProps)
     const daysUntilExpiry = differenceInDays(parseISO(document.expiry_date), new Date());
 
     if (daysUntilExpiry < 0) {
-      return <Badge variant="destructive">Expired</Badge>;
+      return <Badge variant="destructive">{t("documentCard.expired")}</Badge>;
     } else if (daysUntilExpiry <= 7) {
-      return <Badge className="bg-warning text-warning-foreground">Expires in {daysUntilExpiry}d</Badge>;
+      return <Badge className="bg-warning text-warning-foreground">{t("documentCard.expiresIn")} {daysUntilExpiry}d</Badge>;
     } else if (daysUntilExpiry <= 30) {
-      return <Badge variant="secondary">Expires in {daysUntilExpiry}d</Badge>;
+      return <Badge variant="secondary">{t("documentCard.expiresIn")} {daysUntilExpiry}d</Badge>;
     }
     return null;
   };
@@ -68,22 +70,22 @@ const DocumentCard = ({ document, onView, onEdit, onDelete }: DocumentCardProps)
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => onView(document)}>
                   <Eye className="w-4 h-4 mr-2" />
-                  View
+                  {t("documentCard.view")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDownload}>
                   <Download className="w-4 h-4 mr-2" />
-                  Download
+                  {t("documentCard.download")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => onEdit(document)}>
                   <Pencil className="w-4 h-4 mr-2" />
-                  Edit
+                  {t("documentCard.edit")}
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => onDelete(document.id)}
                   className="text-destructive focus:text-destructive"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
-                  Delete
+                  {t("documentCard.delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -98,7 +100,7 @@ const DocumentCard = ({ document, onView, onEdit, onDelete }: DocumentCardProps)
 
           {document.expiry_date && (
             <p className="text-xs text-muted-foreground mt-2">
-              Expires: {format(parseISO(document.expiry_date), "MMM d, yyyy")}
+              {t("documentCard.expires")}: {formatDateFromISO(document.expiry_date, "d MMM yyyy")}
             </p>
           )}
         </div>

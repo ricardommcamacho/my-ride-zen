@@ -1,4 +1,5 @@
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
+import { formatNumber } from "../lib/utils";
 
 interface StatCardProps {
   title: string;
@@ -44,7 +45,7 @@ const StatCard = ({ title, value, icon: Icon, change, subtitle }: StatCardProps)
               return ChangeIcon ? <ChangeIcon className="w-3 h-3" /> : null;
             })()}
             <span className="font-medium">
-              {Math.abs(change).toFixed(1)}% vs last period
+              {formatNumber(Math.abs(change), 1)}% vs last period
             </span>
           </div>
         )}

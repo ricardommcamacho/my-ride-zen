@@ -7,6 +7,8 @@ import { useFuelRecords } from '@/hooks/useFuelRecords';
 import { useMaintenance } from '@/hooks/useMaintenance';
 import BottomNav from '@/components/BottomNav';
 import { Skeleton } from '@/components/ui/skeleton';
+import { t } from '@/lib/localization';
+import { formatNumber } from '@/lib/utils';
 
 const Stats = () => {
   const { vehicles, primaryVehicle, loading: vehiclesLoading } = useVehicles();
@@ -63,8 +65,8 @@ const Stats = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-md mx-auto px-4 py-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-1">Statistics</h1>
-          <p className="text-muted-foreground">Track your vehicle expenses</p>
+          <h1 className="text-3xl font-bold text-foreground mb-1">{t('stats.title')}</h1>
+          <p className="text-muted-foreground">{t('stats.subtitle')}</p>
         </div>
 
         {/* Vehicle Selector */}
@@ -74,7 +76,7 @@ const Stats = () => {
             onValueChange={setSelectedVehicleId}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select a vehicle" />
+              <SelectValue placeholder={t('stats.selectVehicle')} />
             </SelectTrigger>
             <SelectContent>
               {vehicles.map((v) => (
@@ -92,11 +94,11 @@ const Stats = () => {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
                 <DollarSign className="w-4 h-4" />
-                Total Spent
+                {t('stats.totalSpent')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">€{totalSpent.toFixed(2)}</p>
+              <p className="text-2xl font-bold">€{formatNumber(totalSpent, 2)}</p>
             </CardContent>
           </Card>
 
@@ -104,11 +106,11 @@ const Stats = () => {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
                 <Fuel className="w-4 h-4" />
-                Fuel
+                {t('stats.fuel')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">€{totalFuelSpent.toFixed(2)}</p>
+              <p className="text-2xl font-bold">€{formatNumber(totalFuelSpent, 2)}</p>
             </CardContent>
           </Card>
 
@@ -116,11 +118,11 @@ const Stats = () => {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
                 <Wrench className="w-4 h-4" />
-                Maintenance
+                {t('stats.maintenance')}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">€{totalMaintenanceSpent.toFixed(2)}</p>
+              <p className="text-2xl font-bold">€{formatNumber(totalMaintenanceSpent, 2)}</p>
             </CardContent>
           </Card>
 
@@ -128,15 +130,15 @@ const Stats = () => {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
-                Avg. Consumption
+                {t('stats.avgConsumption')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">
-                {avgConsumption > 0 ? `${avgConsumption.toFixed(1)}` : 'N/A'}
+                {avgConsumption > 0 ? `${formatNumber(avgConsumption, 1)}` : 'N/A'}
               </p>
               {avgConsumption > 0 && (
-                <p className="text-xs text-muted-foreground">L/100km</p>
+                <p className="text-xs text-muted-foreground">{t('stats.lPer100km')}</p>
               )}
             </CardContent>
           </Card>
@@ -145,12 +147,12 @@ const Stats = () => {
         {/* Recent Transactions */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
+            <CardTitle>{t('stats.recentTransactions')}</CardTitle>
           </CardHeader>
           <CardContent>
             {fuelRecords.length === 0 && maintenanceLogs.length === 0 ? (
               <p className="text-muted-foreground text-center py-8">
-                No transactions yet. Start tracking your expenses!
+                {t('stats.noTransactions')}
               </p>
             ) : (
               <div className="space-y-3">
@@ -176,10 +178,10 @@ const Stats = () => {
                           )}
                           <div>
                             <p className="font-medium text-sm">
-                              {isFuel ? 'Fuel refill' : item.description}
+                              {isFuel ? t('stats.fuelRefill') : item.description}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {new Date(date).toLocaleDateString()}
+                              {new Date(date).toLocaleDateString('pt-PT')}
                             </p>
                           </div>
                         </div>

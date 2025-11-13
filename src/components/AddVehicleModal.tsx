@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useVehicles } from '@/hooks/useVehicles';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { t } from '@/lib/localization';
 
 const vehicleSchema = z.object({
   brand: z.string().min(2, 'Brand is required').max(50),
@@ -79,18 +80,18 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Your First Vehicle</DialogTitle>
+          <DialogTitle>{t('addVehicleModal.title')}</DialogTitle>
           <DialogDescription>
-            Let's get started by adding your vehicle details
+            {t('addVehicleModal.subtitle')}
           </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="brand">Brand *</Label>
+            <Label htmlFor="brand">{t('addVehicleModal.brand')} *</Label>
             <Input
               id="brand"
-              placeholder="e.g., Toyota"
+              placeholder={t('addVehicleModal.brandPlaceholder')}
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
               required
@@ -98,10 +99,10 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="model">Model *</Label>
+            <Label htmlFor="model">{t('addVehicleModal.model')} *</Label>
             <Input
               id="model"
-              placeholder="e.g., Corolla"
+              placeholder={t('addVehicleModal.modelPlaceholder')}
               value={model}
               onChange={(e) => setModel(e.target.value)}
               required
@@ -110,7 +111,7 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="year">Year *</Label>
+              <Label htmlFor="year">{t('addVehicleModal.year')} *</Label>
               <Input
                 id="year"
                 type="number"
@@ -123,10 +124,10 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="plate">Plate *</Label>
+              <Label htmlFor="plate">{t('addVehicleModal.plate')} *</Label>
               <Input
                 id="plate"
-                placeholder="00-AA-00"
+                placeholder={t('addVehicleModal.platePlaceholder')}
                 value={plate}
                 onChange={(e) => setPlate(e.target.value.toUpperCase())}
                 required
@@ -135,41 +136,41 @@ export const AddVehicleModal = ({ open, onClose }: AddVehicleModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">{t('addVehicleModal.type')} *</Label>
             <Select value={type} onValueChange={(value: any) => setType(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="car">Car</SelectItem>
-                <SelectItem value="motorcycle">Motorcycle</SelectItem>
-                <SelectItem value="electric">Electric</SelectItem>
+                <SelectItem value="car">{t('addVehicleModal.car')}</SelectItem>
+                <SelectItem value="motorcycle">{t('addVehicleModal.motorcycle')}</SelectItem>
+                <SelectItem value="electric">{t('addVehicleModal.electric')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="fuel_type">Fuel Type *</Label>
+            <Label htmlFor="fuel_type">{t('addVehicleModal.fuelType')} *</Label>
             <Select value={fuelType} onValueChange={(value: any) => setFuelType(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gasoline">Gasoline</SelectItem>
-                <SelectItem value="diesel">Diesel</SelectItem>
-                <SelectItem value="electric">Electric</SelectItem>
-                <SelectItem value="hybrid">Hybrid</SelectItem>
-                <SelectItem value="lpg">LPG</SelectItem>
+                <SelectItem value="gasoline">{t('addVehicleModal.gasoline')}</SelectItem>
+                <SelectItem value="diesel">{t('addVehicleModal.diesel')}</SelectItem>
+                <SelectItem value="electric">{t('addVehicleModal.electric')}</SelectItem>
+                <SelectItem value="hybrid">{t('addVehicleModal.hybrid')}</SelectItem>
+                <SelectItem value="lpg">{t('addVehicleModal.lpg')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              {t('addVehicleModal.cancel')}
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? 'Adding...' : 'Add Vehicle'}
+              {loading ? t('addVehicleModal.adding') : t('addVehicleModal.addVehicle')}
             </Button>
           </div>
         </form>

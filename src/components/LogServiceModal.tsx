@@ -9,7 +9,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
+import { t } from "@/lib/localization";
 import { useMaintenance } from "@/hooks/useMaintenance";
 import { useVehicles } from "@/hooks/useVehicles";
 import { toast } from "sonner";
@@ -51,28 +52,28 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
     e.preventDefault();
 
     if (!formData.vehicle_id) {
-      toast.error("Please select a vehicle");
-      return;
-    }
+        toast.error(t('logServiceModal.pleaseSelectVehicle'));
+        return;
+      }
 
     setLoading(true);
     try {
       await addMaintenance({
         vehicle_id: formData.vehicle_id,
-        service_date: format(formData.service_date, "yyyy-MM-dd"),
+        service_date: format(formData.service_date, "yyyy-MM-dd"), // Keep ISO format for storage
         type: formData.type,
         description: formData.description,
         cost: formData.cost ? Number(formData.cost) : null,
         odometer: Number(formData.odometer),
         service_provider: formData.service_provider || null,
         next_service_date: formData.next_service_date
-          ? format(formData.next_service_date, "yyyy-MM-dd")
+          ? format(formData.next_service_date, "yyyy-MM-dd") // Keep ISO format for storage
           : null,
         next_service_km: formData.next_service_km ? Number(formData.next_service_km) : null,
         notes: formData.notes || null,
       });
 
-      toast.success("Maintenance log added successfully");
+      toast.success(t('logServiceModal.maintenanceLogAdded'));
       onClose();
       setFormData({
         vehicle_id: vehicleId || "",
@@ -87,7 +88,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
         notes: "",
       });
     } catch (error: any) {
-      toast.error(error.message || "Failed to add maintenance log");
+      toast.error(error.message || t('logServiceModal.failedToAddMaintenanceLog'));
     } finally {
       setLoading(false);
     }
@@ -97,18 +98,18 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Log Service</DialogTitle>
-        </DialogHeader>
+        <DialogTitle>{t('logServiceModal.title')}</DialogTitle>
+      </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">{t('logServiceModal.vehicle')}</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder={t('logServiceModal.selectVehicle')} />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -121,7 +122,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label>Service Date *</Label>
+            <Label>{t('logServiceModal.serviceDate')}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -129,7 +130,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
                   className={cn("w-full justify-start text-left font-normal")}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(formData.service_date, "PPP")}
+                  {formatDate(formData.service_date)}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -147,7 +148,7 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">{t('logServiceModal.type')}</Label>
             <Select
               value={formData.type}
               onValueChange={(value: typeof maintenanceTypes[number]) =>
@@ -160,7 +161,13 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
               <SelectContent>
                 {maintenanceTypes.map((type) => (
                   <SelectItem key={type} value={type} className="capitalize">
-                    {type.replace("_", " ")}
+                    {type === 'oil_change' ? t('logServiceModal.oilChange') :
+                     type === 'tire_rotation' ? t('logServiceModal.tireRotation') :
+                     type === 'brake_service' ? t('logServiceModal.brakeService') :
+                     type === 'battery_replacement' ? t('logServiceModal.batteryReplacement') :
+                     type === 'inspection' ? t('logServiceModal.inspection') :
+                     type === 'repair' ? t('logServiceModal.repair') :
+                     t('logServiceModal.other')}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -168,56 +175,56 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description *</Label>
+            <Label htmlFor="description">{t('logServiceModal.description')}</Label>
             <Input
               id="description"
               value={formData.description}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-              placeholder="e.g., Changed engine oil and filter"
+              placeholder={t('logServiceModal.descriptionPlaceholder')}
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="cost">Cost (€)</Label>
+              <Label htmlFor="cost">{t('logServiceModal.cost')}</Label>
               <Input
                 id="cost"
                 type="number"
                 step="0.01"
                 value={formData.cost}
                 onChange={(e) => setFormData((prev) => ({ ...prev, cost: e.target.value }))}
-                placeholder="85.00"
+                placeholder={t('logServiceModal.costPlaceholder')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="odometer">Odometer (km) *</Label>
+              <Label htmlFor="odometer">{t('logServiceModal.odometer')}</Label>
               <Input
                 id="odometer"
                 type="number"
                 value={formData.odometer}
                 onChange={(e) => setFormData((prev) => ({ ...prev, odometer: e.target.value }))}
-                placeholder="45230"
+                placeholder={t('logServiceModal.odometerPlaceholder')}
                 required
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="service_provider">Service Provider</Label>
+            <Label htmlFor="service_provider">{t('logServiceModal.serviceProvider')}</Label>
             <Input
               id="service_provider"
               value={formData.service_provider}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, service_provider: e.target.value }))
               }
-              placeholder="e.g., AutoService Pro"
+              placeholder={t('logServiceModal.serviceProviderPlaceholder')}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Next Service Date</Label>
+            <Label>{t('logServiceModal.nextServiceDate')}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -229,9 +236,9 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {formData.next_service_date ? (
-                    format(formData.next_service_date, "PPP")
+                    formatDate(formData.next_service_date)
                   ) : (
-                    <span>Pick a date</span>
+                    <span>{t('logServiceModal.pickDate')}</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -275,10 +282,10 @@ const LogServiceModal = ({ open, onClose, vehicleId }: LogServiceModalProps) => 
 
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              {t('logServiceModal.cancel')}
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Adding..." : "Add Service"}
+              {loading ? t('logServiceModal.adding') : t('logServiceModal.addService')}
             </Button>
           </div>
         </form>

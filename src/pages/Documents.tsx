@@ -10,6 +10,8 @@ import BottomNav from '@/components/BottomNav';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { t } from '@/lib/localization';
+import { formatDateFromISO } from '@/lib/utils';
 
 const Documents = () => {
   const { vehicles, loading: vehiclesLoading } = useVehicles();
@@ -24,8 +26,8 @@ const Documents = () => {
     if (files && files.length > 0) {
       // TODO: Implement document upload logic
       toast({
-        title: "Upload em desenvolvimento",
-        description: `${files.length} arquivo(s) selecionado(s)`,
+        title: t('documents.uploadInDevelopment'),
+        description: t('documents.filesSelected', { count: files.length }),
       });
     }
   };
@@ -57,8 +59,8 @@ const Documents = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-md mx-auto px-4 py-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-1">Documents</h1>
-          <p className="text-muted-foreground">Manage your vehicle documents</p>
+          <h1 className="text-3xl font-bold text-foreground mb-1">{t('documents.title')}</h1>
+          <p className="text-muted-foreground">{t('documents.subtitle')}</p>
         </div>
 
         {/* Filters */}
@@ -69,7 +71,7 @@ const Documents = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Vehicles</SelectItem>
+                <SelectItem value="all">{t('documents.allVehicles')}</SelectItem>
                 {vehicles.map((v) => (
                   <SelectItem key={v.id} value={v.id}>
                     {v.brand} {v.model}
@@ -98,7 +100,7 @@ const Documents = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search documents..."
+              placeholder={t('documents.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -107,9 +109,9 @@ const Documents = () => {
 
           <Tabs value={typeFilter} onValueChange={setTypeFilter}>
             <TabsList className="w-full">
-              <TabsTrigger value="all" className="flex-1">All</TabsTrigger>
-              <TabsTrigger value="insurance" className="flex-1">Insurance</TabsTrigger>
-              <TabsTrigger value="registration" className="flex-1">Registration</TabsTrigger>
+              <TabsTrigger value="all" className="flex-1">{t('documents.all')}</TabsTrigger>
+              <TabsTrigger value="insurance" className="flex-1">{t('documents.insurance')}</TabsTrigger>
+              <TabsTrigger value="registration" className="flex-1">{t('documents.registration')}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -121,13 +123,13 @@ const Documents = () => {
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <FileText className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">No documents yet</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('documents.noDocuments')}</h3>
               <p className="text-muted-foreground text-center mb-4">
-                Upload your first document to get started
+                {t('documents.uploadFirst')}
               </p>
               <Button>
                 <Upload className="w-4 h-4 mr-2" />
-                Upload Document
+                {t('documents.uploadButton')}
               </Button>
             </CardContent>
           </Card>
@@ -143,7 +145,7 @@ const Documents = () => {
                   </p>
                   {doc.expiry_date && (
                     <p className="text-xs text-muted-foreground mt-2">
-                      Expires: {new Date(doc.expiry_date).toLocaleDateString()}
+                      {t('documents.expires')}: {formatDateFromISO(doc.expiry_date)}
                     </p>
                   )}
                 </CardContent>

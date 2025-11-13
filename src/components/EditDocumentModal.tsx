@@ -15,11 +15,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { format, parseISO } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { useDocuments } from "@/hooks/useDocuments";
 import { useVehicles } from "@/hooks/useVehicles";
 import { toast } from "sonner";
 import { Tables } from "@/integrations/supabase/types";
+import { t } from "@/lib/localization";
 
 type Document = Tables<"documents"> & {
   vehicles: { brand: string; model: string } | null;
@@ -85,10 +86,10 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
         },
       });
       
-      toast.success("Document updated successfully");
+      toast.success(t("editDocumentModal.documentUpdated"));
       onClose();
     } catch (error: any) {
-      toast.error(error.message || "Failed to update document");
+      toast.error(error.message || t("editDocumentModal.failedToUpdate"));
     } finally {
       setLoading(false);
     }
@@ -100,25 +101,25 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Document</DialogTitle>
+          <DialogTitle>{t("editDocumentModal.title")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title">{t("editDocumentModal.title")}</Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="e.g., Insurance Certificate 2024"
+              placeholder={t("editDocumentModal.titlePlaceholder")}
               required
             />
           </div>
 
           {/* Type */}
           <div className="space-y-2">
-            <Label htmlFor="type">Type *</Label>
+            <Label htmlFor="type">{t("editDocumentModal.type")}</Label>
             <Select
               value={formData.type}
               onValueChange={(value: typeof documentTypes[number]) =>
@@ -131,7 +132,7 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
               <SelectContent>
                 {documentTypes.map((type) => (
                   <SelectItem key={type} value={type} className="capitalize">
-                    {type.replace("_", " ")}
+                    {t(`editDocumentModal.${type}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -140,13 +141,13 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
 
           {/* Vehicle */}
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">{t("editDocumentModal.vehicle")}</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder={t("editDocumentModal.selectVehicle")} />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -160,7 +161,7 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
 
           {/* Expiry Date */}
           <div className="space-y-2">
-            <Label>Expiry Date (Optional)</Label>
+            <Label>{t("editDocumentModal.expiryDate")}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -172,9 +173,9 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {formData.expiry_date ? (
-                    format(formData.expiry_date, "PPP")
+                    formatDate(formData.expiry_date)
                   ) : (
-                    <span>Pick a date</span>
+                    <span>{t("editDocumentModal.pickDate")}</span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -192,12 +193,12 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
+            <Label htmlFor="notes">{t("editDocumentModal.notes")}</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="Additional notes..."
+              placeholder={t("editDocumentModal.notesPlaceholder")}
               rows={3}
             />
           </div>
@@ -205,10 +206,10 @@ const EditDocumentModal = ({ document, open, onClose }: EditDocumentModalProps) 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              {t("editDocumentModal.cancel")}
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? t("editDocumentModal.saving") : t("editDocumentModal.saveChanges")}
             </Button>
           </div>
         </form>

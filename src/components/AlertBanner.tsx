@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useDocuments } from "@/hooks/useDocuments";
 import { differenceInDays, parseISO } from "date-fns";
 import { useState, useEffect } from "react";
+import { t } from "@/lib/localization";
 
 interface AlertBannerProps {
   vehicleId: string;
@@ -52,10 +53,10 @@ const AlertBanner = ({ vehicleId }: AlertBannerProps) => {
             <AlertCircle className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h3 className="font-semibold text-warning-foreground">{firstDoc.title} Due Soon</h3>
+            <h3 className="font-semibold text-warning-foreground">{firstDoc.title} {t("alertBanner.dueSoon")}</h3>
             <p className="text-sm text-foreground/80 mt-1">
-              Expires in <span className="font-semibold">{daysLeft} day{daysLeft !== 1 ? 's' : ''}</span>
-              {expiringDocs.length > 1 && ` (+${expiringDocs.length - 1} more)`}
+              {t("alertBanner.expiresIn")} <span className="font-semibold">{daysLeft} {daysLeft !== 1 ? t("alertBanner.days") : t("alertBanner.day")}</span>
+              {expiringDocs.length > 1 && ` (${t("alertBanner.more", { count: expiringDocs.length - 1 })})`}
             </p>
           </div>
         </div>

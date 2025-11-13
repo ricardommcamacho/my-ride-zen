@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '@/components/BottomNav';
 import { toast } from 'sonner';
+import { t } from '@/lib/localization';
 
 const Settings = () => {
   const { user, signOut } = useAuth();
@@ -13,7 +14,7 @@ const Settings = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    toast.success('Signed out successfully');
+    toast.success(t('settings.signedOut'));
     navigate('/auth');
   };
 
@@ -21,8 +22,8 @@ const Settings = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-md mx-auto px-4 py-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-1">Settings</h1>
-          <p className="text-muted-foreground">Manage your account and preferences</p>
+          <h1 className="text-3xl font-bold text-foreground mb-1">{t('settings.title')}</h1>
+          <p className="text-muted-foreground">{t('settings.subtitle')}</p>
         </div>
 
         <div className="space-y-4">
@@ -31,13 +32,13 @@ const Settings = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
-                Profile
+                {t('settings.profile')}
               </CardTitle>
-              <CardDescription>Your account information</CardDescription>
+              <CardDescription>{t('settings.profileDescription')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               <div>
-                <p className="text-sm text-muted-foreground">Email</p>
+                <p className="text-sm text-muted-foreground">{t('settings.email')}</p>
                 <p className="font-medium">{user?.email}</p>
               </div>
             </CardContent>
@@ -48,17 +49,17 @@ const Settings = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Info className="w-5 h-5" />
-                About
+                {t('settings.about')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div>
-                <p className="text-sm text-muted-foreground">Version</p>
+                <p className="text-sm text-muted-foreground">{t('settings.version')}</p>
                 <p className="font-medium">1.0.0</p>
               </div>
               <Separator />
               <div>
-                <p className="text-sm text-muted-foreground">App Name</p>
+                <p className="text-sm text-muted-foreground">{t('settings.appName')}</p>
                 <p className="font-medium">VehiclePulse</p>
               </div>
             </CardContent>
@@ -72,7 +73,7 @@ const Settings = () => {
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
+            {t('settings.signOut')}
           </Button>
         </div>
       </div>

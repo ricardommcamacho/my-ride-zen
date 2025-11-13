@@ -106,7 +106,7 @@ export const groupByMonth = (
   const monthMap = new Map<string, { fuel: number; maintenance: number }>();
 
   fuelRecords.forEach((record) => {
-    const month = new Date(record.fuel_date).toLocaleDateString("en-US", {
+    const month = new Date(record.fuel_date).toLocaleDateString("pt-PT", {
       month: "short",
       year: "numeric",
     });
@@ -116,7 +116,7 @@ export const groupByMonth = (
   });
 
   maintenanceLogs.forEach((log) => {
-    const month = new Date(log.service_date).toLocaleDateString("en-US", {
+    const month = new Date(log.service_date).toLocaleDateString("pt-PT", {
       month: "short",
       year: "numeric",
     });
@@ -138,7 +138,7 @@ export const groupByMonth = (
  * Format currency
  */
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("pt-PT", {
     style: "currency",
     currency: "EUR",
     minimumFractionDigits: 2,

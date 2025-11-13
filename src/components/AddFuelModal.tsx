@@ -10,10 +10,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Switch } from "@/components/ui/switch";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, formatNumber } from "@/lib/utils";
 import { useFuelRecords } from "@/hooks/useFuelRecords";
 import { useVehicles } from "@/hooks/useVehicles";
 import { toast } from "sonner";
+import { t } from "@/lib/localization";
 
 interface AddFuelModalProps {
   open: boolean;
@@ -43,7 +44,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
     setFormData((prev) => {
       const newData = { ...prev, quantity };
       if (newData.price_per_unit) {
-        newData.cost = (Number(quantity) * Number(newData.price_per_unit)).toFixed(2);
+        newData.cost = formatNumber(Number(quantity) * Number(newData.price_per_unit), 2);
       }
       return newData;
     });
@@ -53,7 +54,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
     setFormData((prev) => {
       const newData = { ...prev, price_per_unit };
       if (newData.quantity) {
-        newData.cost = (Number(newData.quantity) * Number(price_per_unit)).toFixed(2);
+        newData.cost = formatNumber(Number(newData.quantity) * Number(price_per_unit), 2);
       }
       return newData;
     });
@@ -63,15 +64,15 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
     e.preventDefault();
 
     if (!formData.vehicle_id) {
-      toast.error("Please select a vehicle");
-      return;
-    }
+        toast.error(t('addFuelModal.pleaseSelectVehicle'));
+        return;
+      }
 
     setLoading(true);
     try {
       await addFuelRecord({
         vehicle_id: formData.vehicle_id,
-        fuel_date: format(formData.fuel_date, "yyyy-MM-dd"),
+        fuel_date: format(formData.fuel_date, "yyyy-MM-dd"), // Keep ISO format for storage
         fuel_type: formData.fuel_type,
         quantity: Number(formData.quantity),
         cost: Number(formData.cost),
@@ -83,7 +84,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
         notes: formData.notes || null,
       });
 
-      toast.success("Fuel record added successfully");
+      toast.success(t('addFuelModal.fuelRecordAdded'));
       onClose();
       setFormData({
         vehicle_id: vehicleId || "",
@@ -99,7 +100,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
         notes: "",
       });
     } catch (error: any) {
-      toast.error(error.message || "Failed to add fuel record");
+      toast.error(error.message || t('addFuelModal.failedToAddRecord'));
     } finally {
       setLoading(false);
     }
@@ -109,18 +110,18 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add Fuel Record</DialogTitle>
+          <DialogTitle>{t('addFuelModal.title')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="vehicle">Vehicle *</Label>
+            <Label htmlFor="vehicle">{t('addFuelModal.selectVehicle')} *</Label>
             <Select
               value={formData.vehicle_id}
               onValueChange={(value) => setFormData((prev) => ({ ...prev, vehicle_id: value }))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select vehicle" />
+                <SelectValue placeholder={t('addFuelModal.selectVehicle')} />
               </SelectTrigger>
               <SelectContent>
                 {vehicles.map((vehicle) => (
@@ -133,7 +134,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Date *</Label>
+            <Label>{t('addFuelModal.date')} *</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -141,7 +142,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
                   className={cn("w-full justify-start text-left font-normal")}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(formData.fuel_date, "PPP")}
+                  {formatDate(formData.fuel_date)}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -158,7 +159,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="quantity">Quantity (L) *</Label>
+              <Label htmlFor="quantity">{t('addFuelModal.quantity')} *</Label>
               <Input
                 id="quantity"
                 type="number"
@@ -171,7 +172,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="price_per_unit">Price/L (€) *</Label>
+              <Label htmlFor="price_per_unit">{t('addFuelModal.pricePerLiter')} *</Label>
               <Input
                 id="price_per_unit"
                 type="number"
@@ -185,7 +186,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cost">Total Cost (€) *</Label>
+            <Label htmlFor="cost">{t('addFuelModal.totalCost')} *</Label>
             <Input
               id="cost"
               type="number"
@@ -198,7 +199,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="odometer">Odometer (km) *</Label>
+            <Label htmlFor="odometer">{t('addFuelModal.odometer')} *</Label>
             <Input
               id="odometer"
               type="number"
@@ -211,7 +212,7 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
 
           <div className="flex items-center justify-between py-2">
             <Label htmlFor="is_full_tank" className="cursor-pointer">
-              Full Tank Refill
+              {t('addFuelModal.fullTankRefill')}
             </Label>
             <Switch
               id="is_full_tank"
@@ -223,42 +224,42 @@ const AddFuelModal = ({ open, onClose, vehicleId }: AddFuelModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="station_name">Station Name</Label>
+            <Label htmlFor="station_name">{t('addFuelModal.stationName')}</Label>
             <Input
               id="station_name"
               value={formData.station_name}
               onChange={(e) => setFormData((prev) => ({ ...prev, station_name: e.target.value }))}
-              placeholder="e.g., BP, Shell"
+              placeholder={t('addFuelModal.stationPlaceholder')}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">{t('addFuelModal.location')}</Label>
             <Input
               id="location"
               value={formData.location}
               onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
-              placeholder="City or address"
+              placeholder={t('addFuelModal.locationPlaceholder')}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">{t('addFuelModal.notes')}</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
-              placeholder="Additional notes..."
+              placeholder={t('addFuelModal.notesPlaceholder')}
               rows={2}
             />
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
-              Cancel
+              {t('addFuelModal.cancel')}
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? "Adding..." : "Add Record"}
+              {loading ? t('addFuelModal.adding') : t('addFuelModal.addRecord')}
             </Button>
           </div>
         </form>

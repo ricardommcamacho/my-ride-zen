@@ -3,6 +3,8 @@ import { useDocuments } from "@/hooks/useDocuments";
 import { useMaintenance } from "@/hooks/useMaintenance";
 import { format, parseISO, addDays, isPast } from "date-fns";
 import { useMemo } from "react";
+import { cn, formatDateFromISO, formatNumber } from "@/lib/utils";
+import { t } from "@/lib/localization";
 
 interface UpcomingTimelineProps {
   vehicleId: string;
@@ -35,9 +37,9 @@ const UpcomingTimeline = ({ vehicleId }: UpcomingTimelineProps) => {
       .map(doc => ({
         id: doc.id,
         type: "document" as const,
-        title: `${doc.title} expires`,
+        title: `${doc.title} ${t("upcomingTimeline.expires")}`,
         date: parseISO(doc.expiry_date!),
-        dateStr: format(parseISO(doc.expiry_date!), 'MMM dd'),
+        dateStr: formatDateFromISO(doc.expiry_date!, 'dd MMM'),
         completed: false,
         cost: undefined,
       }));
@@ -53,9 +55,9 @@ const UpcomingTimeline = ({ vehicleId }: UpcomingTimelineProps) => {
         type: "maintenance" as const,
         title: log.description,
         date: parseISO(log.next_service_date!),
-        dateStr: format(parseISO(log.next_service_date!), 'MMM dd'),
+        dateStr: formatDateFromISO(log.next_service_date!, 'dd MMM'),
         completed: isPast(parseISO(log.next_service_date!)),
-        cost: log.cost ? `€${log.cost.toFixed(0)}` : undefined,
+        cost: log.cost ? `€${formatNumber(log.cost, 0)}` : undefined,
       }));
 
     return [...docItems, ...maintenanceItems]
@@ -66,9 +68,9 @@ const UpcomingTimeline = ({ vehicleId }: UpcomingTimelineProps) => {
   if (timelineItems.length === 0) {
     return (
       <div className="bg-card shadow-card rounded-xl p-5 mb-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
-        <h2 className="text-lg font-semibold mb-4 text-foreground">Upcoming</h2>
+        <h2 className="text-lg font-semibold mb-4 text-foreground">{t("upcomingTimeline.upcoming")}</h2>
         <p className="text-sm text-muted-foreground text-center py-8">
-          No upcoming events in the next 60 days
+          {t("upcomingTimeline.noUpcomingEvents")}
         </p>
       </div>
     );
@@ -76,7 +78,7 @@ const UpcomingTimeline = ({ vehicleId }: UpcomingTimelineProps) => {
 
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
-      <h2 className="text-lg font-semibold mb-4 text-foreground">Upcoming</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">{t("upcomingTimeline.upcoming")}</h2>
       <div className="space-y-3">
         {timelineItems.map((item) => {
           const Icon = item.type === "document" ? FileText : Wrench;

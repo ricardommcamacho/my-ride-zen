@@ -1,16 +1,17 @@
 import { Home, FileText, BarChart3, Settings } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/localization";
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { icon: Home, label: "Home", path: "/" },
-    { icon: FileText, label: "Docs", path: "/docs" },
-    { icon: BarChart3, label: "Stats", path: "/stats" },
-    { icon: Settings, label: "More", path: "/settings" },
+    { icon: Home, label: t("bottomNav.home"), path: "/" },
+    { icon: FileText, label: t("bottomNav.docs"), path: "/docs" },
+    { icon: BarChart3, label: t("bottomNav.stats"), path: "/stats" },
+    { icon: Settings, label: t("bottomNav.more"), path: "/settings" },
   ];
 
   return (

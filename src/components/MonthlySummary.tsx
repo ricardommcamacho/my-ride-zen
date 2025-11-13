@@ -2,6 +2,8 @@ import { TrendingDown, TrendingUp, Euro, Gauge } from "lucide-react";
 import { useStats } from "@/hooks/useStats";
 import { startOfMonth, endOfMonth } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { t } from "@/lib/localization";
+import { formatNumber } from "@/lib/utils";
 
 interface MonthlySummaryProps {
   vehicleId: string;
@@ -32,15 +34,15 @@ const MonthlySummary = ({ vehicleId }: MonthlySummaryProps) => {
 
   return (
     <div className="bg-card shadow-card rounded-xl p-5 mb-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-      <h2 className="text-lg font-semibold mb-4 text-foreground">This Month</h2>
+      <h2 className="text-lg font-semibold mb-4 text-foreground">{t("monthlySummary.thisMonth")}</h2>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <Euro className="w-4 h-4" />
-            <span>Total Spent</span>
+            <span>{t("monthlySummary.totalSpent")}</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
-            €{currentStats.totalSpent.toFixed(0)}
+            €{formatNumber(currentStats.totalSpent, 0)}
           </p>
           {percentageChanges.total !== null && (
             <div className={`flex items-center gap-1 text-sm ${
@@ -51,17 +53,17 @@ const MonthlySummary = ({ vehicleId }: MonthlySummaryProps) => {
               ) : (
                 <TrendingDown className="w-3 h-3" />
               )}
-              <span>{Math.abs(percentageChanges.total).toFixed(0)}% vs last month</span>
+              <span>{formatNumber(Math.abs(percentageChanges.total), 0)}% {t("monthlySummary.vsLastMonth")}</span>
             </div>
           )}
         </div>
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <Gauge className="w-4 h-4" />
-            <span>Avg. Consumption</span>
+            <span>{t("monthlySummary.avgConsumption")}</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
-            {currentStats.avgConsumption > 0 ? currentStats.avgConsumption.toFixed(1) : '--'}
+            {currentStats.avgConsumption > 0 ? formatNumber(currentStats.avgConsumption, 1) : '--'}
           </p>
           <p className="text-sm text-muted-foreground">L/100km</p>
         </div>
@@ -73,7 +75,7 @@ const MonthlySummary = ({ vehicleId }: MonthlySummaryProps) => {
         />
       </div>
       <p className="text-xs text-muted-foreground mt-2">
-        {budgetPercentage.toFixed(0)}% of monthly budget used (€{monthlyBudget})
+        {formatNumber(budgetPercentage, 0)}% {t("monthlySummary.budgetUsed")} (€{monthlyBudget})
       </p>
     </div>
   );

@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Download, Calendar, FileText, AlertCircle } from "lucide-react";
 import { format, parseISO, differenceInDays } from "date-fns";
+import { cn, formatDateFromISO, formatNumber } from "@/lib/utils";
 import { Tables } from "@/integrations/supabase/types";
 
 type Document = Tables<"documents"> & {
@@ -84,7 +85,7 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
                 </p>
                 <div className="flex items-center gap-2">
                   <p className="font-medium">
-                    {format(parseISO(document.expiry_date), "MMMM d, yyyy")}
+                    {formatDateFromISO(document.expiry_date, "d MMMM yyyy")}
                   </p>
                   {isExpired && (
                     <span className="text-xs text-destructive font-semibold flex items-center gap-1">
@@ -113,7 +114,7 @@ const ViewDocumentModal = ({ document, open, onClose }: ViewDocumentModalProps) 
               <p className="text-sm text-muted-foreground mb-1">File Size</p>
               <p className="text-sm">
                 {document.file_size
-                  ? `${(document.file_size / 1024 / 1024).toFixed(2)} MB`
+                  ? `${formatNumber(document.file_size / 1024 / 1024, 2)} MB`
                   : "N/A"}
               </p>
             </div>
